@@ -7,8 +7,10 @@ import {
   FormLabel,
   VStack,
 } from "@chakra-ui/react";
+import { GetServerSideProps } from "next";
 import { FormEvent, useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
+import { withSSRGuest } from "../utils/withSSRGuest";
 
 export default function Home() {
   const { signIn } = useContext(AuthContext);
@@ -17,15 +19,11 @@ export default function Home() {
 
   async function handleLogin(event: FormEvent) {
     event.preventDefault();
-
     const data = {
       email,
       password,
     };
-
     await signIn(data);
-
-    alert("signedIn")
   }
 
   return (
@@ -76,3 +74,11 @@ export default function Home() {
     </Flex>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = withSSRGuest(
+  async (context) => {
+    return {
+      props: {},
+    };
+  }
+);
